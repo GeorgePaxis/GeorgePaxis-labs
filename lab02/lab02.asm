@@ -18,9 +18,36 @@ main:
         addiu      $s1, $zero, 0     # sum of negative even values starts as 0
 
         ########################################################################
-        #  Write your code here
-        # NOTE: Don't print out the results! Automatic testing will get the final
-        #  values of $s0, $s1 and check if they are correct
+        li	   $t1, 0
+        add	   $t2, $a1, $zero
+loop:
+	beq	   $a0, $zero, exitloop		#an einai adiops o pinakas paw sto exitloop
+	beq	   $a0, $t1, exitloop
+	
+	lw	   $t0, 0($t2)			#diavazei ta stoixeia tou pinaka
+	
+	slt	   $t3, $t0, $zero		#elenxei an einai thetikos i arnitikos
+	
+	bne	   $t3, $zero, negative		#ama einai arnitikos paw sto negative
+	andi	   $t4, $t0, 0x1		#ama einai thetikos elenxei an einai perittos
+	beq	   $t4, $zero, skip		#ama einai artios me petaei sto skip
+	add	   $s0, $s0, $t0		#ton prosthetei ston $s0 efoson den einai artios
+	j	   skip
+	
+negative:
+	
+	andi	   $t4, $t0, 0x1		#elenxei an einai artios
+	bne	   $t4, $zero, skip		#an einai perittos paw sto skip
+	add	   $s1, $s1, $t0		#ton prosthetei sto $s1 efoson den einai perittos
+
+skip:
+	
+	addi	   $t2, $t2, 4			
+	addi	   $t1, $t1, 1
+	j	   loop
+
+exitloop:
+	
         ########################################################################
         
 exit: 
